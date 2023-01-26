@@ -21,6 +21,9 @@ def main():
     period = 0xFFFF
     tim4 = INIT()
     
+    direction = 0
+    up = 1
+    
     #Motor Driver setup - timer 3
     pinB4 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
     pinB5 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
@@ -30,13 +33,38 @@ def main():
     ch1 = tim3.channel (1, pyb.Timer.PWM, pin=pinB4)
     ch2 = tim3.channel (2, pyb.Timer.PWM, pin=pinB5)
     
-    pinB4.value(0)
-    pinB5 = ch2.pulse_width_percent(20)
+    pinB4 = ch1.pulse_width_percent(0)
+    pinB5 = ch2.pulse_width_percent(50)
     
     pinA10.value(1)
-    
+    x = 100
+    y = 0
     while(True):
         try:
+            if((direction == 0) and (up == 1)):
+                x += 10
+                pinB5 = ch2.pulse_width_percent(x)
+                if(x == 100):
+                    up = 0
+            if((direction == 0) and (up == 0)):
+                x -= 10
+                pinB5 = ch2.pulse_width_percent(x)
+                if(x == 0):
+                    direction = 1
+                    up = 1       
+            elif((direction == 1) and (up == 1)):
+                y += 10
+                if(y == 100):
+                    up = 0
+            if((direction == 1) and (up == 0)):
+                y -= 10
+                pinB5 = ch2.pulse_width_percent(x)
+                if(y == 0):
+                    direction = 0
+                    up = 1  
+            print(x)
+            print(y)
+    
             temp2 = tim4.counter()
             delta = temp2 - temp1
             temp1 = temp2
@@ -45,8 +73,9 @@ def main():
             elif(delta < (((-1 * period) + 1)/2)):
                 delta += period + 1 
             count += delta
+            
             print(count)
-            utime.sleep (.5)
+            utime.sleep (.05)
             
         except KeyboardInterrupt:
             break
