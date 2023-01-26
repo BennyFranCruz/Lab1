@@ -19,16 +19,20 @@ def main():
     
     tim4 = INIT()
     while(True):
-        temp2 = tim4.counter()
-        delta = temp2 - temp1
-        temp1 = temp2
-        if(delta > ((period + 1)/2)):
-            delta -= period + 1
-        elif(delta < (((-1 * period) + 1)/2)):
-            delta += period + 1 
-        count += delta
-        print(count)
-        utime.sleep (.5)
+        try:
+            temp2 = tim4.counter()
+            delta = temp2 - temp1
+            temp1 = temp2
+            if(delta > ((period + 1)/2)):
+                delta -= period + 1
+            elif(delta < (((-1 * period) + 1)/2)):
+                delta += period + 1 
+            count += delta
+            print(count)
+            utime.sleep (.5)
+            
+        except KeyboardInterrupt:
+            break
 if __name__ == "__main__":
     main()
         
