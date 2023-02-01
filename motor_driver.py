@@ -1,40 +1,40 @@
-class MotorDriver:
-    """! 
-    This class implements a motor driver for an ME405 kit. 
-    """
+import pyb
 
-    def __init__ (self, en_pin, in1pin, in2pin, timer):
-        """! 
-        Creates a motor driver by initializing GPIO
-        pins and turning off the motor for safety. 
-        @param en_pin (There will be several pin parameters)
-        """
-              
-        self.in1pin = pyb.Pin(pyb.Pin.board.in1pin, pyb.Pin.OUT_PP)
-        self.in2pin = pyb.Pin(pyb.Pin.board.in2pin, pyb.Pin.OUT_PP)
-        self.enpin = pyb.Pin(pyb.Pin.board.en_pin, pyb.Pin.OUT_PP)
+class MotorDriver:   
     
-        self.timer = pyb.Timer (timer, freq=10000)
+    def __init__(self, en_pin, in1pin, in2pin, timer):
         
-        timer.channel (1, pyb.Timer.PWM, pin=pinB4)
-        timer.channel (2, pyb.Timer.PWM, pin=pinB5)
+        self.tim   = timer
+        self.enpin = en_pin
+        self.pin1  = in1pin
+        self.pin2  = in2pin
         
-        print ("Creating a motor driver")
+        self.enpin.value(0)
+    
+    
+    def set_duty_cycle(self, level):
+        
+        ch1 = self.tim.channel (1, pyb.Timer.PWM, pin=self.pin1)
+        ch2 = self.tim.channel (2, pyb.Timer.PWM, pin=self.pin2)
+        
+        if(level < 0):
+            self.pin1 = ch1.pulse_width_percent(0)
+            self.pin2 = ch2.pulse_width_percent(abs(level))
+        elif(level > 0):
+            self.pin1 = ch1.pulse_width_percent(abs(level))
+            self.pin2 = ch2.pulse_width_percent(0)
+        else:
+            self.pin1 = ch1.pulse_width_percent(0)
+            self.pin2 = ch2.pulse_width_percent(0)
+        
+        self.enpin.value(1)
 
-    def set_duty_cycle (self, level):
-        """!
-        This method sets the duty cycle to be sent
-        to the motor to the given level. Positive values
-        cause torque in one direction, negative values
-        in the opposite direction.
-        @param level A signed integer holding the duty
-               cycle of the voltage sent to the motor 
-        """
-            
-        #pinB4 = ch1.pulse_width_percent(0)
-        #pinB5 = ch2.pulse_width_percent(50)
-        print (f"Setting duty cycle to {level}")
-        
-if __name__ == "__main__":
-        print("main")
+
+if __name__ == '__main__':
+    pinB4 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
+    pinB5 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
+    pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
+    timer = pyb.Timer (3, freq=10000)
     
+    moe = MotorDriver(pinA10,pinB4,pinB5, timer)
+    moe.set_duty_cycle (-20)
