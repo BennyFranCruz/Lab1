@@ -1,6 +1,7 @@
 import pyb
 import utime
 
+import test
 
 
 def INIT():
