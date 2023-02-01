@@ -12,9 +12,7 @@ def INIT():
     ch1 = tim4.channel (1, pyb.Timer.ENC_AB, pin=pinB6)
     ch2 = tim4.channel (2, pyb.Timer.ENC_AB, pin=pinB7)
     return tim4
-
-    
-    
+ 
 def main():
     temp1 = 0
     temp2 = 0
@@ -40,8 +38,20 @@ def main():
     
     pinA10.value(1)
     
+    
     x = 0
     while(True):
+        temp2 = tim4.counter()
+        delta = temp2 - temp1
+        temp1 = temp2
+        if(delta > ((period + 1)/2)):
+            delta -= period + 1
+        elif(delta < (((-1 * period) + 1)/2)):
+            delta += period + 1 
+        count += delta
+        print(count)
+
+        
         try:
             while(x < 100):
                 pinB5 = ch2.pulse_width_percent(x)
@@ -66,12 +76,10 @@ def main():
                 x -= 1 
                 utime.sleep(.05)
                 print(x)
-                
-            print(count)
-            utime.sleep (.05)
             
         except KeyboardInterrupt:
             break
+        
 if __name__ == "__main__":
     main()
         
