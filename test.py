@@ -1,12 +1,16 @@
+import pyb
+
 class MotorDriver:
     
     
-    def __init__(self, en_pin, in1pin, in2pin, timer)
+    def __init__(self, en_pin, in1pin, in2pin, timer):
         
-        self.enpin = pyb.Pin(pyb.Pin.board.en_pin, pyb.Pin.OUT_PP)
-        self.pin1  = pyb.Pin(pyb.Pin.board.in1pin, pyb.Pin.OUT_PP)
-        self.pin2  = pyb.Pin(pyb.Pin.board.in2pin, pyb.Pin.OUT_PP)
-        self.tim   = pyb.Timer(timer, freq=10000)
+        self.tim   = timer
+        
+        self.enpin = en_pin
+        self.pin1  = in1pin
+        self.pin2  = in2pin
+        
         
         self.enpin.value(0)
     
@@ -27,5 +31,15 @@ class MotorDriver:
             self.pin2 = ch2.pulse_width_percent(0)
         
         self.enpin.value(1)
-        
+
+
+if __name__ == '__main__':
+    pinB4 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
+    pinB5 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
+    pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
+    timer = pyb.Timer (3, freq=10000)
+    
+    moe = MotorDriver(pinA10,pinB4,pinB5, timer)
+    moe.set_duty_cycle (-20)
+
         
