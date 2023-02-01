@@ -1,6 +1,8 @@
 import pyb
 import utime
 
+
+
 def INIT():
     #timer 4setup
     pinB6 = pyb.Pin(pyb.Pin.board.PB6, pyb.Pin.IN)
@@ -37,43 +39,34 @@ def main():
     pinB5 = ch2.pulse_width_percent(50)
     
     pinA10.value(1)
-    x = 100
-    y = 0
+    
+    x = 0
     while(True):
         try:
-            if((direction == 0) and (up == 1)):
-                x += 10
+            while(x < 100):
                 pinB5 = ch2.pulse_width_percent(x)
-                if(x == 100):
-                    up = 0
-            if((direction == 0) and (up == 0)):
-                x -= 10
+                x += 1
+                utime.sleep(.05)
+                print(x)
+                
+            while(x > 0):
                 pinB5 = ch2.pulse_width_percent(x)
-                if(x == 0):
-                    direction = 1
-                    up = 1       
-            elif((direction == 1) and (up == 1)):
-                y += 10
-                if(y == 100):
-                    up = 0
-            if((direction == 1) and (up == 0)):
-                y -= 10
-                pinB5 = ch2.pulse_width_percent(x)
-                if(y == 0):
-                    direction = 0
-                    up = 1  
-            print(x)
-            print(y)
-    
-            temp2 = tim4.counter()
-            delta = temp2 - temp1
-            temp1 = temp2
-            if(delta > ((period + 1)/2)):
-                delta -= period + 1
-            elif(delta < (((-1 * period) + 1)/2)):
-                delta += period + 1 
-            count += delta
+                x -= 1 
+                utime.sleep(.05)
+                print(x)
             
+            while(x < 100):
+                pinB4 = ch1.pulse_width_percent(x)
+                x += 1
+                utime.sleep(.05)
+                print(x)
+                
+            while(x > 0):
+                pinB4 = ch1.pulse_width_percent(x)
+                x -= 1 
+                utime.sleep(.05)
+                print(x)
+                
             print(count)
             utime.sleep (.05)
             
