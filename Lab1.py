@@ -1,6 +1,7 @@
 import pyb
 import utime
-import motor_driver
+
+
 
 def INIT():
     #timer 4setup
@@ -8,7 +9,6 @@ def INIT():
     pinB7 = pyb.Pin(pyb.Pin.board.PB7, pyb.Pin.IN)
     tim4 = pyb.Timer(4, prescaler=0, period=0xFFFF)
     
-    #encoder
     ch1 = tim4.channel (1, pyb.Timer.ENC_AB, pin=pinB6)
     ch2 = tim4.channel (2, pyb.Timer.ENC_AB, pin=pinB7)
     return tim4
@@ -25,8 +25,6 @@ def main():
     up = 1
     
     #Motor Driver setup - timer 3
-    
-    
     pinB4 = pyb.Pin(pyb.Pin.board.PB4, pyb.Pin.OUT_PP)
     pinB5 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
     pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
