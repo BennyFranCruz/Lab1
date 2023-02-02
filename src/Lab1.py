@@ -42,7 +42,7 @@ def main():
     pinB5 = pyb.Pin(pyb.Pin.board.PB5, pyb.Pin.OUT_PP)
     pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
     timer = pyb.Timer (3, freq=10000)
-    
+     
     #calling the motor driver class and giving the object name "moe"
     moe = motor_driver.MotorDriver(pinA10,pinB4,pinB5, timer)
     
