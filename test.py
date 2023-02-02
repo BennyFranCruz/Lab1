@@ -6,7 +6,6 @@ class MotorDriver:
     def __init__(self, en_pin, in1pin, in2pin, timer):
         
         self.tim   = timer
-        
         self.enpin = en_pin
         self.pin1  = in1pin
         self.pin2  = in2pin
